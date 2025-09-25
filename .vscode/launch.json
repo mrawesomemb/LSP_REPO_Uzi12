@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+        "type": "java",
+        "name": "ETLPipeline",
+        "request": "launch",
+        "mainClass": "org.howard.edu.lsp.assignment2.ETLPipeline",
+        "projectName": "LSP_REPO_Uzi12_2b6d549c"
+    },
+    {
+        "type": "java",
+        "name": "HelloWorld",
+        "request": "launch",
+        "mainClass": "org.howard.edu.lsp.assignment1.HelloWorld",
+        "projectName": ""
+    },
+    {
+        "type": "java",
+        "name": "Run HelloWorld",
+        "request": "launch",
+        "mainClass": "org.howard.edu.lsp.assignment1.HelloWorld",
+        "projectName": "project-root"
+    }
+]
+}
