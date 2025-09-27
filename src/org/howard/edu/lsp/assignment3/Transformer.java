@@ -1,7 +1,7 @@
 /**
  * Name: Miles Brown
  */
-package org.howard.edu.lsp.assignment2;
+package org.howard.edu.lsp.assignment3;
 
 /**
  * Generic interface for transforming objects.
