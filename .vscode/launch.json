@@ -5,6 +5,13 @@
         "type": "java",
         "name": "Main",
         "request": "launch",
+        "mainClass": "org.howard.edu.lsp.midterm.question4.Main",
+        "projectName": "LSP_REPO_Uzi12_2b6d549c"
+    },
+    {
+        "type": "java",
+        "name": "Main",
+        "request": "launch",
         "mainClass": "org.howard.edu.lsp.midterm.question2.Main",
         "projectName": "LSP_REPO_Uzi12_2b6d549c"
     },

@@ -20,5 +20,7 @@ public class Main {
     } catch (IllegalArgumentException e) {
       System.out.println("Error: invalid dimension: " + e.getMessage());
     }
+    //Yes, this would be considered an example of overloading. 
+    //Overloading is when you make multiple methods with the same name but different parameters.
   }
 }
