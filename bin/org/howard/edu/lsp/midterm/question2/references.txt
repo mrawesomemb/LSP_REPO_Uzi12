@@ -1,0 +1,559 @@
+This question asked: Using one or more Arthur Riel heuristics, analyze whether the StudentPortalHelper class demonstrates high or low cohesion. 
+And I gave this answer:A well-designed class should have high cohesion. High cohesion means that all the internal elements of the class are related and work well together to fulfill a single purpose. This makes the class more understandable, testable, and maintainable. 
+
+Would you say that the answer I gave makes sense?
+
+ChatGPT said:
+
+Your answer makes sense in terms of explaining what high cohesion is, but it doesn’t actually analyze the StudentPortalHelper class itself using Arthur Riel’s heuristics. Right now, it’s more of a general definition rather than an application to the class in question.
+
+To improve your answer, you would need to:
+
+Apply Riel’s heuristics (like “do methods share many common attributes?” or “does the class have unrelated responsibilities?”).
+
+Conclude whether the class has high or low cohesion based on those observations.
+
+For example, you could write something like:
+
+Using Riel’s heuristics, we can see that StudentPortalHelper contains methods for managing student logins, fetching grades, and updating profiles. Since most of these methods operate on student data and contribute to a single purpose—helping students interact with the portal—the class demonstrates high cohesion. If, however, it also contained unrelated methods, such as sending email notifications or logging system events, that would indicate low cohesion.
+
+So your current answer is directionally correct, but it’s incomplete because it doesn’t analyze the class itself.
+
+If you want, I can help you rewrite it fully using Riel’s heuristics so it directly answers the question. Do you want me to do that?
+
+You said:
+and would this be a good way to fix the class:
+This class has low cohesion, as it violates multiple of the Arthur Riel principles. To make this class more cohesive, there should be multiple classes that each have one responsibility. For example, there could be a GpaCalculator class that focuses on grade-related logic and a separate PasswordChecker class that’s used for password policy logic. You could also remove the static global state so that it’s more testable.
+
+ChatGPT said:
+
+Yes — that is a much stronger answer than your original one. Here’s why:
+
+Identifies low cohesion clearly: You explicitly state that the class violates Riel’s heuristics.
+
+Suggests concrete refactoring: Splitting responsibilities into a GpaCalculator and PasswordChecker aligns well with Single Responsibility Principle, which is closely related to cohesion.
+
+Mentions testability: Removing static/global state is a good suggestion because it makes the class easier to test, which is often an indirect benefit of higher cohesion.
+
+If you wanted to make it even better, you could tie it more explicitly to Riel’s heuristics. For example:
+
+Riel’s “Directly accesses attributes” heuristic → separate classes reduce unrelated attribute access.
+
+Riel’s “Methods use common attributes” heuristic → grouping grade logic into GpaCalculator ensures methods share the same data.
+
+Adding a sentence like that makes it clear you are not just guessing that cohesion is low — you’re analyzing it systematically.
+
+If you want, I can rewrite your paragraph to be fully polished and Riel-heuristics-focused so it reads like a top-scoring answer.
+
+You said:
+Would this be a good way of using composition to refactor a class:
+ANSWER: To allow trim-level change for a car to dynamically change, you could use composition to represent trim level as a runtime-swappable component. The steps to do this would be: 1. Create a TrimLevel interface that defines trim-specific behavior, like the trim level (base, sport, luxury) and the price. 2. Implement concrete trim classes with each class encapsulating trim-specific details. 3. Modify Car to use composition. This means we can create a method such as setTrimLevel() that lets you change the trim at any point while keeping the same car instance. 
+ChatGPT said:
+
+Yes — your answer is conceptually correct and shows a good understanding of using composition, but it could be polished slightly for clarity and precision. Let’s break it down:
+
+What’s good:
+
+Identifies the need for dynamic behavior: You correctly note that trim level should be changeable at runtime.
+
+Uses a clear interface: TrimLevel interface is the right abstraction for different trim behaviors.
+
+Encapsulation of details: Each concrete trim class holds trim-specific info (like price or features).
+
+Dynamic swapping via composition: Car contains a TrimLevel reference, and setTrimLevel() allows runtime changes without modifying the Car class itself.
+
+Minor improvements:
+
+You could explicitly mention that Car delegates trim-related behavior to the TrimLevel instance. Right now it’s implied, but stating it strengthens the explanation.
+
+A small note that this avoids inheritance explosion — i.e., you don’t need separate subclasses for every combination of car and trim.
+
+Here’s a slightly refined version of your answer:
+
+To allow the trim level of a car to change dynamically at runtime, we can use composition by representing trim level as a swappable component. Steps:
+
+Create a TrimLevel interface defining trim-specific behavior (e.g., trim name, price, features).
+
+Implement concrete trim classes, each encapsulating the details of a particular trim.
+
+Modify Car to hold a TrimLevel instance and delegate trim-specific behavior to it. Add a method like setTrimLevel() to swap the trim at runtime.
+This approach allows the same Car instance to change trim dynamically, avoids inheritance complexity, and keeps the design modular and maintainable.
+
+If you want, I can also draw a small UML diagram showing this composition — it often helps clarify this concept visually. Do you want me to do that?
+
+You said:
+Show me how to do this and explain what you did:
+Question 4. (30 pts.)
+
+Design and implement a small smart-campus device system showing both class inheritance (concrete classes extend a common abstract class) and interface implementation.
+
+1) Abstract Base Class — Device
+The following Device class is partially implemented for you.
+You must not modify this code, but you will use it in your subclasses:
+
+
+package org.howard.edu.lsp.midterm.question4;
+
+public abstract class Device {
+  private String id;
+  private String location;
+  private long lastHeartbeatEpochSeconds;
+  private boolean connected;
+
+  // PROVIDED CONSTRUCTOR
+  public Device(String id, String location) {
+    if (id == null || id.isEmpty() || location == null || location.isEmpty()) {
+      throw new IllegalArgumentException("Invalid id or location");
+    }
+    this.id = id;
+    this.location = location;
+    this.lastHeartbeatEpochSeconds = 0;
+    this.connected = false;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+
+
+  public long getLastHeartbeatEpochSeconds() {
+    return lastHeartbeatEpochSeconds;
+  }
+
+  public boolean isConnected() {
+    return connected;
+  }
+
+  protected void setConnected(boolean connected) {
+    this.connected = connected;
+  }
+
+  public void heartbeat() {
+    this.lastHeartbeatEpochSeconds = System.currentTimeMillis() / 1000;
+  }
+
+  public abstract String getStatus();
+}
+
+You will extend this class in your DoorLock, Thermostat, and Camera implementations.
+All subclasses must call super(id, location) in their constructors.
+
+2) Capability Interfaces (behaviors only)
+Networked
+
+void connect();
+void disconnect();
+boolean isConnected();
+
+Behavior:
+•	connect() brings the device online by setting connected = true.
+•	disconnect() sets connected = false.
+•	isConnected() reports the current connection state.
+(Concrete classes may satisfy this using Device’s protected setter and public getter.)
+
+BatteryPowered
+
+int getBatteryPercent();      // 0..100
+void setBatteryPercent(int percent);
+
+Behavior:
+•	getBatteryPercent() returns current battery %.
+•	setBatteryPercent(int) updates it; throw IllegalArgumentException if outside 0..100 inclusive.
+
+3) Concrete Devices (must extend Device and implement interfaces)
+All fields must be private. Implement methods exactly as specified.
+
+A)	DoorLock — extends Device, implements Networked, BatteryPowered
+Private fields
+
+private int batteryPercent;
+
+Constructor
+public DoorLock(String id, String location, int initialBattery)
+
+•	Call super(id, location).
+•	Initialize battery by calling setBatteryPercent(initialBattery) (enforces 0..100).
+
+
+Implemented methods
+
+// Networked
+@Override public void connect()    { setConnected(true);  }
+@Override public void disconnect() { setConnected(false); }
+@Override public boolean isConnected() { return super.isConnected(); }
+
+// BatteryPowered
+@Override public int getBatteryPercent() { return batteryPercent; }
+@Override public void setBatteryPercent(int percent) {
+  if (percent < 0 || percent > 100) throw new IllegalArgumentException("battery 0..100");
+  this.batteryPercent = percent;
+}
+
+// Status
+@Override public String getStatus() {
+  String connStatus = isConnected() ? "up" : "down";
+  return "DoorLock[id=" + getId() + ", loc=" + getLocation() +
+         ", conn=" + connStatus + ", batt=" + batteryPercent + "%]";
+}
+
+B) Thermostat — extends Device, implements Networked
+Private fields
+
+private double temperatureC;
+
+Constructor
+public Thermostat(String id, String location, double initialTempC)
+
+•	Call super(id, location).
+•	Initialize temperatureC to initialTempC.
+
+Accessors
+
+public double getTemperatureC();
+public void setTemperatureC(double temperatureC);
+
+Implemented methods
+
+// Networked
+@Override public void connect()    { setConnected(true);  }
+@Override public void disconnect() { setConnected(false); }
+@Override public boolean isConnected() { return super.isConnected(); }
+
+// Status
+@Override public String getStatus() {
+  String connStatus = isConnected() ? "up" : "down";
+  return "Thermostat[id=" + getId() + ", loc=" + getLocation() +
+         ", conn=" + connStatus + ", tempC=" + temperatureC + "]";
+}
+
+C) Camera — extends Device, implements Networked, BatteryPowered
+
+Private fields
+private int batteryPercent;
+
+Constructor
+
+public Camera(String id, String location, int initialBattery)
+
+•	Call super(id, location).
+•	Initialize battery by calling setBatteryPercent(initialBattery).
+
+
+
+
+Implemented methods
+
+// Networked
+@Override public void connect()    { setConnected(true);  }
+@Override public void disconnect() { setConnected(false); }
+@Override public boolean isConnected() { return super.isConnected(); }
+
+// BatteryPowered
+@Override public int getBatteryPercent() { return batteryPercent; }
+@Override public void setBatteryPercent(int percent) {
+  if (percent < 0 || percent > 100) throw new IllegalArgumentException("battery 0..100");
+  this.batteryPercent = percent;
+}
+
+// Status
+@Override public String getStatus() {
+  String connStatus = isConnected() ? "up" : "down";
+  return "Camera[id=" + getId() + ", loc=" + getLocation() +
+         ", conn=" + connStatus + ", batt=" + batteryPercent + "%]";
+}
+
+4) Provided Driver
+
+Do not modify this file. Your classes must compile and run with it unchanged.
+
+
+package org.howard.edu.lsp.midterm.question4;
+
+import java.util.*;
+
+public class Main {
+  public static void main(String[] args) {
+    Device lock   = new DoorLock("DL-101", "DormA-1F", 85);
+    Device thermo = new Thermostat("TH-202", "Library-2F", 21.5);
+    Device cam    = new Camera("CA-303", "Quad-North", 72);
+
+    // === Invalid battery test ===
+    System.out.println("\n== Exception test ==");
+    try {
+      Device badCam = new Camera("CA-404", "Test-Lab", -5);
+      System.out.println("ERROR: Exception was not thrown for invalid battery!");
+    } catch (IllegalArgumentException e) {
+      System.out.println("Caught expected exception: " + e.getMessage());
+    }
+
+    // === Heartbeat demonstration ===
+    System.out.println("\n== Heartbeat timestamps BEFORE ==");
+    for (Device d : Arrays.asList(lock, thermo, cam)) {
+      System.out.println(d.getId() + " lastHeartbeat=" + d.getLastHeartbeatEpochSeconds());
+    }
+
+    lock.heartbeat();
+    thermo.heartbeat();
+    cam.heartbeat();
+
+    System.out.println("\n== Heartbeat timestamps AFTER ==");
+    for (Device d : Arrays.asList(lock, thermo, cam)) {
+      System.out.println(d.getId() + " lastHeartbeat=" + d.getLastHeartbeatEpochSeconds());
+    }
+
+    // === Base-class polymorphism ===
+    List<Device> devices = Arrays.asList(lock, thermo, cam);
+    System.out.println("\n== Initial status via Device ==");
+    for (Device d : devices) {
+      System.out.println(d.getStatus());
+    }
+
+    // === Interface polymorphism: Networked ===
+    System.out.println("\n== Connect all Networked ==");
+    for (Device d : devices) {
+      if (d instanceof Networked) {
+        ((Networked) d).connect();
+      }
+    }
+
+    // === Interface polymorphism: BatteryPowered ===
+    System.out.println("\n== Battery report (BatteryPowered) ==");
+    for (Device d : devices) {
+      if (d instanceof BatteryPowered) {
+        BatteryPowered bp = (BatteryPowered) d;
+        System.out.println(d.getClass().getSimpleName() + " battery = " + bp.getBatteryPercent() + "%");
+      }
+    }
+
+    // === Final status check ===
+    System.out.println("\n== Updated status via Device ==");
+    for (Device d : devices) {
+      System.out.println(d.getStatus());
+    }
+  }
+}
+
+ChatGPT said:
+
+Absolutely! Let’s go step by step and show how to implement the smart-campus device system with inheritance and interface implementation, as required by your assignment. I’ll also explain what I’m doing and why.
+
+1️⃣ Define the Interfaces
+
+We have two behaviors:
+
+Networked – for devices that can connect/disconnect
+
+BatteryPowered – for devices that use battery
+
+package org.howard.edu.lsp.midterm.question4;
+
+// Network behavior
+public interface Networked {
+    void connect();
+    void disconnect();
+    boolean isConnected();
+}
+
+// Battery behavior
+public interface BatteryPowered {
+    int getBatteryPercent();
+    void setBatteryPercent(int percent);
+}
+
+
+Explanation:
+
+Interfaces define behaviors without implementing them.
+
+Concrete classes will implement these behaviors.
+
+This allows polymorphism: code can work with any Networked or BatteryPowered device.
+
+2️⃣ Implement DoorLock
+
+Extends Device
+
+Implements Networked and BatteryPowered
+
+package org.howard.edu.lsp.midterm.question4;
+
+public class DoorLock extends Device implements Networked, BatteryPowered {
+    private int batteryPercent;
+
+    public DoorLock(String id, String location, int initialBattery) {
+        super(id, location);
+        setBatteryPercent(initialBattery); // ensures 0..100
+    }
+
+    // Networked
+    @Override
+    public void connect() { setConnected(true); }
+
+    @Override
+    public void disconnect() { setConnected(false); }
+
+    @Override
+    public boolean isConnected() { return super.isConnected(); }
+
+    // BatteryPowered
+    @Override
+    public int getBatteryPercent() { return batteryPercent; }
+
+    @Override
+    public void setBatteryPercent(int percent) {
+        if (percent < 0 || percent > 100) throw new IllegalArgumentException("battery 0..100");
+        this.batteryPercent = percent;
+    }
+
+    // Device status
+    @Override
+    public String getStatus() {
+        String connStatus = isConnected() ? "up" : "down";
+        return "DoorLock[id=" + getId() + ", loc=" + getLocation() +
+               ", conn=" + connStatus + ", batt=" + batteryPercent + "%]";
+    }
+}
+
+
+Explanation:
+
+DoorLock inherits Device (so it gets id, location, heartbeat, connected state).
+
+Implements Networked and BatteryPowered methods.
+
+Status shows all important info in one string.
+
+3️⃣ Implement Thermostat
+
+Extends Device
+
+Implements Networked (does not have battery)
+
+package org.howard.edu.lsp.midterm.question4;
+
+public class Thermostat extends Device implements Networked {
+    private double temperatureC;
+
+    public Thermostat(String id, String location, double initialTempC) {
+        super(id, location);
+        this.temperatureC = initialTempC;
+    }
+
+    public double getTemperatureC() { return temperatureC; }
+
+    public void setTemperatureC(double temperatureC) { this.temperatureC = temperatureC; }
+
+    // Networked
+    @Override
+    public void connect() { setConnected(true); }
+
+    @Override
+    public void disconnect() { setConnected(false); }
+
+    @Override
+    public boolean isConnected() { return super.isConnected(); }
+
+    // Device status
+    @Override
+    public String getStatus() {
+        String connStatus = isConnected() ? "up" : "down";
+        return "Thermostat[id=" + getId() + ", loc=" + getLocation() +
+               ", conn=" + connStatus + ", tempC=" + temperatureC + "]";
+    }
+}
+
+
+Explanation:
+
+Only implements Networked because it does not need a battery.
+
+Temperature is stored in its own field.
+
+4️⃣ Implement Camera
+
+Extends Device
+
+Implements Networked and BatteryPowered
+
+package org.howard.edu.lsp.midterm.question4;
+
+public class Camera extends Device implements Networked, BatteryPowered {
+    private int batteryPercent;
+
+    public Camera(String id, String location, int initialBattery) {
+        super(id, location);
+        setBatteryPercent(initialBattery);
+    }
+
+    // Networked
+    @Override
+    public void connect() { setConnected(true); }
+
+    @Override
+    public void disconnect() { setConnected(false); }
+
+    @Override
+    public boolean isConnected() { return super.isConnected(); }
+
+    // BatteryPowered
+    @Override
+    public int getBatteryPercent() { return batteryPercent; }
+
+    @Override
+    public void setBatteryPercent(int percent) {
+        if (percent < 0 || percent > 100) throw new IllegalArgumentException("battery 0..100");
+        this.batteryPercent = percent;
+    }
+
+    // Device status
+    @Override
+    public String getStatus() {
+        String connStatus = isConnected() ? "up" : "down";
+        return "Camera[id=" + getId() + ", loc=" + getLocation() +
+               ", conn=" + connStatus + ", batt=" + batteryPercent + "%]";
+    }
+}
+
+
+Explanation:
+
+Very similar to DoorLock.
+
+Implements both interfaces because Camera is battery-powered and networked.
+
+✅ Key Design Points
+
+Inheritance:
+
+All devices extend Device.
+
+Inherited fields: id, location, connected, heartbeat behavior.
+
+Inherited methods: heartbeat(), getId(), getLocation(), isConnected().
+
+Interface Implementation:
+
+Networked allows polymorphism for connectivity.
+
+BatteryPowered allows polymorphism for battery-powered devices.
+
+You can loop over all Networked devices and call connect() without knowing the concrete type.
+
+Polymorphism & Encapsulation:
+
+Main driver uses Device references to interact with all devices.
+
+Type-checks (instanceof Networked or BatteryPowered) allow interface-specific behavior.
+
+All fields are private — encapsulated with getters/setters.
+
+If you want, I can also draw a small UML diagram showing the inheritance (Device) and interface relationships (Networked and BatteryPowered). This often makes grading easier to see your understanding.
+
+Do you want me to do that next?
+
+ChatGPT can make mistakes. Check important info.
